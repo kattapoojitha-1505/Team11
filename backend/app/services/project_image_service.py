@@ -12,33 +12,18 @@ from app.database.supabase import supabase_client
 class ProjectImageService:
     """Service layer for managing project images in the project_images table.
     
-    Handles CRUD operations for project gallery images. Each image is linked
-    to a project and includes metadata about creation time.
+    
     """
 
     def __init__(self, client: Client | None = None) -> None:
         """Initialize the service with the shared Supabase client.
-        
-        Args:
-            client: Optional Supabase Client instance. Defaults to the shared singleton.
+    
         """
         self.client = client or supabase_client
 
     def add_project_image(self, project_id: str, image_url: str) -> dict[str, Any]:
         """Add a new image to a project's gallery.
-        
-        Creates a new record in the project_images table linking an image URL
-        to a specific project.
-        
-        Args:
-            project_id: UUID of the project to add image to
-            image_url: URL of the image (typically from Supabase Storage)
-            
-        Returns:
-            dict: The created image record with id, project_id, image_url, and created_at
-            
-        Raises:
-            Exception: If image addition fails (project not found, database error, etc.)
+   
         """
         try:
             # Validate that the project exists
@@ -74,17 +59,7 @@ class ProjectImageService:
     def get_project_images(self, project_id: str) -> list[dict[str, Any]]:
         """Retrieve all images for a specific project.
         
-        Returns images ordered by creation date (oldest first) to maintain
-        the order they were added to the gallery.
         
-        Args:
-            project_id: UUID of the project
-            
-        Returns:
-            list: List of image records for the project
-            
-        Raises:
-            Exception: If database query fails
         """
         try:
             response = (
@@ -102,14 +77,7 @@ class ProjectImageService:
     def get_image_by_id(self, image_id: str) -> dict[str, Any] | None:
         """Retrieve a specific image by its ID.
         
-        Args:
-            image_id: UUID of the image
-            
-        Returns:
-            dict: The image record if found, None if not found
-            
-        Raises:
-            Exception: If database query fails
+   
         """
         try:
             response = (
@@ -128,18 +96,7 @@ class ProjectImageService:
     def delete_project_image(self, image_id: str, project_id: str) -> bool:
         """Delete an image only if it belongs to the specified project.
         
-        Validates that the image belongs to the provided project before deletion
-        to prevent unauthorized image removal.
         
-        Args:
-            image_id: UUID of the image to delete
-            project_id: UUID of the project (for validation)
-            
-        Returns:
-            bool: True if deletion was successful
-            
-        Raises:
-            Exception: If deletion fails or image doesn't belong to the project
         """
         try:
             # Verify the image belongs to the project
@@ -170,16 +127,7 @@ class ProjectImageService:
     def delete_all_project_images(self, project_id: str) -> bool:
         """Delete all images for a project (bonus helper method).
         
-        Useful when a project is being deleted to clean up its gallery.
-        
-        Args:
-            project_id: UUID of the project whose images should be deleted
-            
-        Returns:
-            bool: True if deletion was successful
-            
-        Raises:
-            Exception: If deletion fails
+      
         """
         try:
             response = (
@@ -196,14 +144,7 @@ class ProjectImageService:
     def count_project_images(self, project_id: str) -> int:
         """Get the count of images for a project (bonus helper method).
         
-        Args:
-            project_id: UUID of the project
-            
-        Returns:
-            int: Number of images for the project
-            
-        Raises:
-            Exception: If database query fails
+       
         """
         try:
             images = self.get_project_images(project_id)
